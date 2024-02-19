@@ -3,7 +3,7 @@
 
 use bevy::asset::AssetMetaCheck;
 use bevy::prelude::*;
-use bevy::window::PrimaryWindow;
+use bevy::window::{close_on_esc, PrimaryWindow};
 use bevy::winit::WinitWindows;
 use bevy::DefaultPlugins;
 use gemstone_defense::GamePlugin;
@@ -14,7 +14,7 @@ fn main() {
     App::new()
         .insert_resource(Msaa::Off)
         .insert_resource(AssetMetaCheck::Never)
-        .insert_resource(ClearColor(Color::rgb(0.4, 0.4, 0.4)))
+        .insert_resource(ClearColor(Color::rgb(0., 0., 0.)))
         .add_plugins(DefaultPlugins.set(WindowPlugin {
             primary_window: Some(Window {
                 title: "Gemstone Defense".to_string(),
@@ -27,6 +27,7 @@ fn main() {
             ..default()
         }))
         .add_plugins(GamePlugin)
+        .add_systems(Update, close_on_esc)
         .add_systems(Startup, set_window_icon)
         .run();
 }
