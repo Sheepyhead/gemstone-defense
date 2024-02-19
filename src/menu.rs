@@ -1,6 +1,8 @@
 use crate::loading::TextureAssets;
+use crate::map::MAP_HEIGHT;
 use crate::GameState;
 use bevy::prelude::*;
+use bevy::render::camera::ScalingMode;
 
 pub struct MenuPlugin;
 
@@ -34,7 +36,14 @@ struct Menu;
 
 fn setup_menu(mut commands: Commands, textures: Res<TextureAssets>) {
     info!("menu");
-    commands.spawn(Camera2dBundle::default());
+    commands.spawn(Camera2dBundle {
+        projection: OrthographicProjection {
+            scaling_mode: ScalingMode::FixedVertical(MAP_HEIGHT as f32),
+            near: -1000.,
+            ..default()
+        },
+        ..default()
+    });
     commands
         .spawn((
             NodeBundle {
