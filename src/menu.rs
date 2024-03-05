@@ -1,4 +1,5 @@
 use crate::loading::TextureAssets;
+use crate::map::{MAP_HEIGHT, MAP_WIDTH};
 use crate::GameState;
 use bevy::prelude::*;
 
@@ -35,8 +36,11 @@ struct Menu;
 fn setup_menu(mut commands: Commands, textures: Res<TextureAssets>) {
     info!("menu");
     let mut camera = Camera3dBundle::default();
-    camera.transform.translation = Vec3::new(0., 50., 50.);
-    camera.transform.look_at(Vec3::ZERO, Vec3::Y);
+    camera.transform.translation = Vec3::new((MAP_WIDTH / 2) as f32, 100., 50.);
+    camera.transform.look_at(
+        Vec3::new((MAP_WIDTH / 2) as f32, 0.0, (MAP_HEIGHT / 2) as f32),
+        Vec3::Y,
+    );
     commands.spawn(camera);
     commands
         .spawn((

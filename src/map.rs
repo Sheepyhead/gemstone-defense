@@ -18,15 +18,26 @@ fn setup(
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
-    commands.spawn(PbrBundle {
-        mesh: meshes
-            .add(
-                Plane3d::default()
-                    .mesh()
-                    .size(MAP_WIDTH as f32, MAP_HEIGHT as f32),
-            )
-            .into(),
-        material: materials.add(Color::GREEN),
-        ..default()
-    });
+    commands.spawn((
+        PbrBundle {
+            mesh: meshes
+                .add(
+                    Plane3d::default()
+                        .mesh()
+                        .size(MAP_WIDTH as f32, MAP_HEIGHT as f32),
+                )
+                .into(),
+            material: materials.add(Color::GREEN),
+            transform: Transform::from_translation(Vec3::new(
+                (MAP_WIDTH / 2) as f32,
+                0.,
+                (MAP_HEIGHT / 2) as f32,
+            )),
+            ..default()
+        },
+        Ground,
+    ));
 }
+
+#[derive(Component)]
+pub struct Ground;
