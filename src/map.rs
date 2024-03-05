@@ -1,4 +1,4 @@
-use bevy::{prelude::*, sprite::MaterialMesh2dBundle};
+use bevy::prelude::*;
 
 use crate::GameState;
 
@@ -16,10 +16,16 @@ impl Plugin for MapPlugin {
 fn setup(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<ColorMaterial>>,
+    mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
-    commands.spawn(MaterialMesh2dBundle {
-        mesh: meshes.add(Rectangle::new(MAP_WIDTH as f32, MAP_HEIGHT as f32)).into(),
+    commands.spawn(PbrBundle {
+        mesh: meshes
+            .add(
+                Plane3d::default()
+                    .mesh()
+                    .size(MAP_WIDTH as f32, MAP_HEIGHT as f32),
+            )
+            .into(),
         material: materials.add(Color::GREEN),
         ..default()
     });
