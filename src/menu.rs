@@ -36,11 +36,8 @@ struct Menu;
 fn setup_menu(mut commands: Commands, textures: Res<TextureAssets>) {
     info!("menu");
     let mut camera = Camera3dBundle::default();
-    camera.transform.translation = Vec3::new((MAP_WIDTH / 2) as f32, 100., 50.);
-    camera.transform.look_at(
-        Vec3::new((MAP_WIDTH / 2) as f32, 0.0, (MAP_HEIGHT / 2) as f32),
-        Vec3::Y,
-    );
+    camera.transform.translation = Vec3::new((MAP_WIDTH / 2) as f32, 50., MAP_HEIGHT as f32);
+    camera.transform.rotate_axis(Vec3::X, f32::to_radians(-45.));
     commands.spawn(camera);
     commands
         .spawn((
