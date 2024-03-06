@@ -1,8 +1,9 @@
 use crate::{
-    map::{Ground, MAP_HEIGHT, MAP_WIDTH},
+    map::{Ground, MapActions, MAP_HEIGHT, MAP_WIDTH},
     GameState,
 };
 use bevy::prelude::*;
+use leafwing_input_manager::{input_map::InputMap, InputManagerBundle};
 
 pub struct PlayerPlugin;
 
@@ -14,14 +15,23 @@ pub struct Player;
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
         app.insert_resource(MapCursorPosition::default())
+            .add_systems(OnEnter(GameState::Playing), setup)
             .add_systems(
                 Update,
-                (draw_cursor, draw_selection_border).run_if(in_state(GameState::Playing)),
+                (update_cursor_position, draw_selection_border)
+                    .run_if(in_state(GameState::Playing)),
             );
     }
 }
 
-fn draw_cursor(
+fn setup(mut commands: Commands) {
+    commands.spawn(InputManagerBundle::with_map(InputMap::new([(
+        MapActions::DigAtCursor,
+        MouseButton::Left,
+    )])));
+}
+
+fn update_cursor_position(
     mut position: ResMut<MapCursorPosition>,
     camera_query: Query<(&Camera, &GlobalTransform)>,
     ground_query: Query<&GlobalTransform, With<Ground>>,
@@ -63,8 +73,8 @@ pub struct MapCursorPosition(Vec3);
 
 impl MapCursorPosition {
     pub fn to_coords(&self) -> (u32, u32) {
-        let x = u32::min(self.0.x as u32, MAP_WIDTH - 1);
-        let y = u32::min(self.0.z as u32, MAP_HEIGHT - 1);
+        let x = u32::min(self.0.x as u32, MAP_WIDTH - 2);
+        let y = u32::min(self.0.z as u32, MAP_HEIGHT - 2);
         (x, y)
     }
 }
